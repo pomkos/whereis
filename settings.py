@@ -24,17 +24,22 @@ def app():
         with open("images/ticket.png", "wb") as f:
             f.write(my_pic.getvalue())
         
-    if not st.button("Submit"):
-        st.stop()
+    if st.button("Submit"):
+        if not current_loc:
+            current_loc = 'unknown'
+        if not future_loc:
+            future_loc = 'unknown'
+        if not future_date:
+            future_date = dt.datetime.now()
 
-    if not current_loc:
-        current_loc = 'unknown'
-    if not future_loc:
-        future_loc = 'unknown'
-    if not future_date:
-        future_date = dt.datetime.now()
-        
-    db = d.dbInfo()
-    db.write_info(current_loc, future_loc, future_date)
+        try:
+            db = d.dbInfo()
+            db.write_info(current_loc, future_loc, future_date)
+            st.success("Information submitted!")
+        except:
+            st.error("An error occurred. Might be worth investigating.")
+            st.stop()
+    else:
+        st.stop()
     
 app()
