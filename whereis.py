@@ -20,7 +20,7 @@ def app():
     * He will be in __{future_loc}__ on {future_date}
     """)
     try:
-    st.image("images/pete.jpg",use_column_width='auto')
+        st.image("images/pete.jpg",use_column_width='auto')
     except:
         st.error("No image found")
         
