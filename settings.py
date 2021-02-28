@@ -15,6 +15,7 @@ def app():
     # future info
     future_loc = st.text_input("Where are you going?")
     future_date = st.date_input("When?", min_value=dt.datetime.now())
+    code = st.text_input("Confirmation code?")
     
     if my_pic is not None:
         pic_name = my_pic.name
@@ -31,10 +32,11 @@ def app():
             future_loc = 'unknown'
         if not future_date:
             future_date = dt.datetime.now()
-
+        if not code:
+            code = 'unknown'
         try:
             db = d.dbInfo()
-            db.write_info(current_loc, future_loc, future_date)
+            db.write_info(current_loc, future_loc, future_date, confirm_code = code)
             st.success("Information submitted!")
         except:
             st.error("An error occurred. Might be worth investigating.")

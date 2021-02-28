@@ -10,14 +10,15 @@ class dbInfo():
         self.engine = engine
         self.cnx = cnx
         
-    def write_info(self,current_loc, future_loc, future_date):
+    def write_info(self,current_loc, future_loc, future_date, confirm_code):
         meta = sq.MetaData()
         meta.reflect(bind = self.engine)
         table = meta.tables['location']
         query = sq.insert(table).values(current_loc = current_loc, 
                                        current_date = dt.datetime.now().date(),
                                        future_loc = future_loc,
-                                       future_date = future_date
+                                       future_date = future_date,
+                                       confrim_code = confirm_code
                                       )
         ResultProxy = self.cnx.execute(query)
     
