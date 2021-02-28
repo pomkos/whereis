@@ -19,9 +19,9 @@ def app():
     * As of {current_date} he is in __{current_loc}__.
     * He will be in __{future_loc}__ on {future_date}
     """)
-#    try:
+    try:
     st.image("images/pete.jpg",use_column_width='auto')
-#    except:
+    except:
         st.error("No image found")
         
     with st.beta_expander("Picking Pete up?"):
