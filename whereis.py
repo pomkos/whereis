@@ -7,7 +7,7 @@ from apps import db_stuff as d
 def app():
     st.title("Where in the world is Peter?")
     db = d.dbInfo()
-    new_info = db.read_info()
+    new_info = db.read_info(table='location')
     future_date = dt.datetime.strftime(new_info.loc['future_date'].date(), "%B %d")
     future_loc = new_info.loc['future_loc'].title()
     current_date = dt.datetime.strftime(new_info.loc['current_date'].date(), "%B %d")
@@ -26,12 +26,9 @@ def app():
         
     with st.beta_expander("Picking Pete up?"):
         try:
-            airline = 'UA'
-            flight_num = '1594'
-            year = '2021'
-            month = '02'
-            day = '28'
-            st.write(f"[Find his flight here](https://www.flightstats.com/v2/flight-tracker/{airline}/{flight_num}?year={year}&month={month}&date={day})!")
+            from apps import ticket_ocr
+            message = ticket_ocr.app()
+            st.write(message)
             st.image("images/ticket.png", use_column_width='auto')
         except:
             st.error("No image found.")
