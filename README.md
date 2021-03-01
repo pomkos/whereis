@@ -1,2 +1,6 @@
-# whereis
-Simple webgui to update plane ticket info
+# Description
+Simple webgui to update and present travel plans. Features include:
+
+* Upload multiple plane tickets from google.com/trips, extract information using `pytesseract`, and present it
+* Manually input where you are and where you plan to be, and when
+* Store above information in an sqlite db, so OCR and extraction is not done on each page reload
