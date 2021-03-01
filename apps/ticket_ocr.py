@@ -117,7 +117,3 @@ def app(num_files):
     
     for ticket in ticket_extract.keys():
         db.write_info('ticket_info',ticket_extract[ticket]) # save extracted ocr into db
-    
-    message = f"[Track his flight here](https://www.flightstats.com/v2/flight-tracker/{data[0]}/{data[1]}?year={data[2]}&month={data[3]}&date={data[4]})!"
-    
-    return message

@@ -16,12 +16,13 @@ class dbInfo():
     def write_info(self,table_name, data):
         table = self.meta.tables[table_name]
         if table_name == 'location':
-            current_loc, future_loc, future_date, confirm_code = data
+            current_loc, future_loc, future_date, confirm_code, message = data
             query = sq.insert(table).values(current_loc = current_loc, 
                                            current_date = dt.datetime.now().date(),
                                            future_loc = future_loc,
                                            future_date = future_date,
-                                           confirm_code = message
+                                           confirm_code = confirm_code,
+                                           message = message
                                           )
         elif table_name == 'ticket_info':
             query = sq.insert(table).values(
@@ -31,7 +32,8 @@ class dbInfo():
                 month_depart = data[3],
                 day_depart = data[4],
                 confirm_code = data[5],
-                date_depart = data[6]
+                date_depart = data[6],
+                date_added = dt.datetime.now()
             )
         ResultProxy = self.cnx.execute(query)
         
@@ -40,13 +42,11 @@ class dbInfo():
         df = pd.read_sql(table,con=self.cnx)
         if table == 'location':
             latest_info = df.loc[len(df)-1,:]
-            self.df = df
             return latest_info
         elif table == 'ticket_info':
-            df = pd.read_sql("ticket_info",con=self.cnx)
-            df = df[df['date_depart'] >= dt.datetime.now()]
-            return df
+            tickets = pd.read_sql("ticket_info",con=self.cnx)
+            return tickets
         elif table == 'airline_info':
-            df = pd.read_sql("airline_info",con=self.cnx)
-            df = df[df['Country'] == 'USA']
-            return df
+            airline = pd.read_sql("airline_info",con=self.cnx)
+            airline = airline[airline['Country'] == 'USA']
+            return airline

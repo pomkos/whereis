@@ -4,6 +4,26 @@ import sqlalchemy as sq
 import pandas as pd
 from apps import db_stuff as d
 
+def message_maker(data):
+    '''
+    Creates message + link to the flight tracker
+    '''
+    message = f"[Track this flight here](https://www.flightstats.com/v2/flight-tracker/{data['plane_code']}/{data['flight_num']}?year={data['year_depart']}&month={data['month_depart']}&date={data['day_depart']})!"
+    
+    return message
+
+def check_how_tickets():
+    '''
+    Double checks how many tickets to show and generate links for
+    '''
+    db = d.dbInfo()
+    tickets = db.read_info('ticket_info')
+    
+    # commented out for testing
+    # tickets = tickets[tickets['date_depart'] >= dt.datetime.now()]
+    
+    return tickets, len(tickets)
+    
 def app():
     st.title("Where in the world is Peter?")
     db = d.dbInfo()
@@ -24,19 +44,20 @@ def app():
     except:
         st.error("No image found")
         
-    with st.beta_expander("Picking Pete up?"):
-        try:
-            from apps import ticket_ocr
-            message = ticket_ocr.app()
-            st.write(message)
-            st.image("images/ticket.png", use_column_width='auto')
-        except:
-            st.error("No image found.")
+    st.write("## Picking Pete up?")
+    tickets, num = check_how_tickets()
     
-    # admin page
-    admin = st.experimental_get_query_params()
-    if admin:
-        import settings
-        settings.app()
-
+    if num == 0:
+        st.info("No tickets were bought yet, check back later.")
+        
+    else:
+        try:
+            for tick in range(1,num):
+                data = dict(tickets.iloc[tick,:])
+                with st.beta_expander(f"Ticket {tick}"):
+                    message = message_maker(data)
+                    st.write(message)
+                    st.image(f"images/ticket_{tick}.png", use_column_width='auto')
+        except:
+            ''
 app()

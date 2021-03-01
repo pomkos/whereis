@@ -50,7 +50,8 @@ def app():
         if not future_date:
             future_date = dt.datetime.now()
         #try:
-        data = current_loc, future_loc, future_date, confirm_code
+        message = 'test'
+        data = current_loc, future_loc, future_date, confirm_code, message
         db.write_info('location',data)
         st.success("Information submitted!")
         #except:
