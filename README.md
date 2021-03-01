@@ -1,5 +1,5 @@
 # Description
-Simple webgui to update and present travel plans. Features include:
+Simple webgui to update and present travel plans. Webgui thanks to the `streamlit` package. Features include:
 
 * Upload multiple plane tickets from google.com/trips, extract information using `pytesseract`, and present it
 * Uploaded tickets will be stored in images folder as `ticket_1.png` etc
