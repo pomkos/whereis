@@ -92,20 +92,31 @@ def info_extract(text_str,df_abbrev):
     
     return results
 
-def app():
+def app(num_files):
     '''
     Only function is to start the extraction process.
     '''
     
-    text_str = ticket_ocr('images/ticket.png')
-    
+    tickets = {}
+    for i in range(num_files):
+        text_str = ticket_ocr(f'images/ticket_{i+1}.png')
+        tickets[f'ticket_{i}'] = text_str
+
     from apps import db_stuff
     db = db_stuff.dbInfo()
     
     df_abbrev = db.read_info('airline_info')
-    data = info_extract(text_str, df_abbrev)
     
-    db.write_info('ticket_info',data) # save extracted ocr into db
+    ticket_extract = {}
+    i = 0
+    for ticket in tickets.keys():
+        i += 1
+        data = info_extract(tickets[ticket], df_abbrev)
+        ticket_extract[f'ticket_{i}'] = data
+    
+    
+    for ticket in ticket_extract.keys():
+        db.write_info('ticket_info',ticket_extract[ticket]) # save extracted ocr into db
     
     message = f"[Track his flight here](https://www.flightstats.com/v2/flight-tracker/{data[0]}/{data[1]}?year={data[2]}&month={data[3]}&date={data[4]})!"
     

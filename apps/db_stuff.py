@@ -16,12 +16,12 @@ class dbInfo():
     def write_info(self,table_name, data):
         table = self.meta.tables[table_name]
         if table_name == 'location':
-            table_name, current_loc, future_loc, future_date, confirm_code = data
+            current_loc, future_loc, future_date, confirm_code = data
             query = sq.insert(table).values(current_loc = current_loc, 
                                            current_date = dt.datetime.now().date(),
                                            future_loc = future_loc,
                                            future_date = future_date,
-                                           message = message
+                                           confirm_code = message
                                           )
         elif table_name == 'ticket_info':
             query = sq.insert(table).values(

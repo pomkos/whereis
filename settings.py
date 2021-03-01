@@ -8,7 +8,7 @@ def app():
     Upload status and files
     '''    
     st.title("Admin Page")
-    my_pic = st.file_uploader("Upload plane ticket",type=['png','jpg'])
+    my_pics = st.file_uploader("Upload plane ticket",type=['png','jpg'], accept_multiple_files = True)
     # current info
     current_loc = st.text_input("Where are you?")
     current_date = dt.datetime.now()
@@ -17,17 +17,30 @@ def app():
     future_loc = st.text_input("Where are you going?")
     future_date = st.date_input("When?", min_value=dt.datetime.now())
     
-    if my_pic is not None:
-        pic_name = my_pic.name
-        pic_type = my_pic.type
-        pic_size = my_pic.size
-
-        message = ticket_ocr.app()
-        
-        with open("images/ticket.png", "wb") as f:
-            f.write(my_pic.getvalue())
+    if len(my_pics) != 0:
+        i = 0
+        for pic in my_pics:
+            i += 1
+            pic_name = pic.name
+            pic_type = pic.type
+            pic_size = pic.size
+            with open(f"images/ticket_{i}.png", "wb") as f:
+                f.write(pic.getvalue())
+    
+        message = ticket_ocr.app(num_files = len(my_pics))
     else:
-        message = 'none'
+        db = d.dbInfo()
+        df = db.read_info('ticket_info')
+        df = df[df['date_depart'] >= dt.datetime.now()]
+        if len(df) == 0:
+            confirm_code = 'none'
+        else:
+            confirm_code = df.loc[:,'confirm_code'].unique()
+            if len(confirm_code) > 1:
+                st.error("Two confirmation codes for one trip have not been implemented yet.")
+                st.stop()
+            else:
+                confirm_code = list(confirm_code)[0]
         
     if st.button("Submit"):
         if not current_loc:
@@ -37,8 +50,7 @@ def app():
         if not future_date:
             future_date = dt.datetime.now()
         #try:
-        db = d.dbInfo()
-        data = [current_loc, future_loc, future_date, message]
+        data = current_loc, future_loc, future_date, confirm_code
         db.write_info('location',data)
         st.success("Information submitted!")
         #except:
