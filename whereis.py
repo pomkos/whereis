@@ -19,8 +19,7 @@ def check_how_tickets():
     db = d.dbInfo()
     tickets = db.read_info('ticket_info')
     
-    # commented out for testing
-    # tickets = tickets[tickets['date_depart'] >= dt.datetime.now()]
+    tickets = tickets[tickets['date_depart'] >= dt.datetime.now()]
     
     return tickets, len(tickets)
     
