@@ -8,7 +8,11 @@ def app():
     Upload status and files
     '''    
     st.title("Admin Page")
-    my_pics = st.file_uploader("Upload plane ticket",type=['png','jpg'], accept_multiple_files = True)
+    col1,col2 = st.beta_columns(2)
+    with col1:
+        my_pics = st.file_uploader("Upload plane ticket",type=['png','jpg'], accept_multiple_files = True)
+    with col2:
+        profile_pic = st.file_uploader("Upload new profile pic", type=['png','jpg'])
     # current info
     current_loc = st.text_input("Where are you?")
     current_date = dt.datetime.now()
@@ -17,6 +21,10 @@ def app():
     future_loc = st.text_input("Where are you going?")
     future_date = st.date_input("When?", min_value=dt.datetime.now())
     
+    if profile_pic:
+        with open("images/pete.jpg","wb") as f:
+            f.write(profile_pic.getvalue())
+        st.success("Saved!")
     if len(my_pics) != 0:
         i = 0
         for pic in my_pics:
@@ -26,6 +34,7 @@ def app():
             pic_size = pic.size
             with open(f"images/ticket_{i}.png", "wb") as f:
                 f.write(pic.getvalue())
+            st.success(f"Ticket_{i} saved!")
     
         message = ticket_ocr.app(num_files = len(my_pics))
     else:
