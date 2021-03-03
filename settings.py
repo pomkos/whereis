@@ -18,8 +18,8 @@ def app():
     current_date = dt.datetime.now()
     
     # future info
-    future_loc = st.text_input("Where are you going?")
-    future_date = st.date_input("When?", min_value=dt.datetime.now())
+    future_loc = st.text_input("Where are you going?").split(';')
+    future_date = st.text_input("When?").split(';')
     
     if profile_pic:
         with open("images/pete.jpg","wb") as f:
