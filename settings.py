@@ -57,7 +57,7 @@ def app():
         if len(future_loc)==0:
             future_loc = 'unknown'
         if not future_date:
-            future_date = dt.datetime.now()
+            future_date = str(dt.datetime.now())
         #try:
         message = 'test'
         data = current_loc, future_loc, future_date, confirm_code, message
