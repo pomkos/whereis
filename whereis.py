@@ -4,20 +4,6 @@ import sqlalchemy as sq
 import pandas as pd
 from apps import db_stuff as d
 
-engine = sq.create_engine('sqlite:///data/find_me.db')
-cnx = engine.connect()
-
-df = pd.DataFrame({
-    'current_loc':['current city'],
-    'current_date':[dt.datetime.now().date()],
-    'future_loc':['new city'],
-    'future_date':['April 1; April 28'],
-    'confirm_code':['unknown'],
-    'message':['unknown']
-})
-
-df.to_sql('location',con=cnx,if_exists='replace',index=False)
-
 def message_maker(data, data_type):
     '''
     Creates message + link to the flight tracker
