@@ -18,8 +18,8 @@ def app():
     current_date = dt.datetime.now()
     
     # future info
-    future_loc = st.text_input("Where are you going?").split(';')
-    future_date = st.text_input("When?").split(';')
+    future_loc = st.text_input("Where are you going?")
+    future_date = st.text_input("When?")
     
     if profile_pic:
         with open("images/pete.jpg","wb") as f:
@@ -54,7 +54,7 @@ def app():
     if st.button("Submit"):
         if not current_loc:
             current_loc = 'unknown'
-        if not future_loc:
+        if len(future_loc)==0:
             future_loc = 'unknown'
         if not future_date:
             future_date = dt.datetime.now()

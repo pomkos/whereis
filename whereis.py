@@ -28,7 +28,7 @@ def app():
     db = d.dbInfo()
     new_info = db.read_info(table='location')
     future_date = dt.datetime.strftime(new_info.loc['future_date'].date(), "%B %d")
-    future_loc = new_info.loc['future_loc'].title()
+    future_loc = new_info.loc['future_loc'].title().split(';')
     current_date = dt.datetime.strftime(new_info.loc['current_date'].date(), "%B %d")
     current_loc = new_info.loc['current_loc'].title()
     code = new_info.loc['confirm_code'].upper()
