@@ -42,6 +42,7 @@ def check_how_tickets():
 def app():
     name = 'Peter'
     nickname = 'Pete'
+    
     st.title(f"Where in the world is {name}?")
     db = d.dbInfo()
     new_info = db.read_info(table='location')
@@ -66,7 +67,7 @@ def app():
     st.write(message)
         
     try:
-        st.image(f"images/{nickname}.jpg",use_column_width='auto')
+        st.image(f"images/{nickname.lower()}.jpg",use_column_width='auto')
     except:
         st.error("No image found")
         
