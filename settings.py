@@ -25,15 +25,20 @@ def app():
         with open("images/pete.jpg","wb") as f:
             f.write(profile_pic.getvalue())
         st.success("Saved!")
+        
     if len(my_pics) != 0:
-        i = 0
+        pic_dict = {}
         for pic in my_pics:
-            i += 1
             pic_name = pic.name
+            pic_dict[pic_name] = pic
+            
             pic_type = pic.type
             pic_size = pic.size
+        i = 0     
+        for pic in sorted(pic_dict):
+            i += 1
             with open(f"images/ticket_{i}.png", "wb") as f:
-                f.write(pic.getvalue())
+                f.write(pic_dict[pic].getvalue())
             st.success(f"Ticket_{i} saved!")
     
         message = ticket_ocr.app(num_files = len(my_pics))
@@ -41,15 +46,16 @@ def app():
         db = d.dbInfo()
         df = db.read_info('ticket_info')
         df = df[df['date_depart'] >= dt.datetime.now()]
-        if len(df) == 0:
-            confirm_code = 'none'
-        else:
-            confirm_code = df.loc[:,'confirm_code'].unique()
-            if len(confirm_code) > 1:
-                st.error("Two confirmation codes for one trip have not been implemented yet.")
-                st.stop()
-            else:
-                confirm_code = list(confirm_code)[0]
+        confirm_code = 'none'
+#         if len(df) == 0:
+#             confirm_code = 'none'
+#         else:
+#             confirm_code = df.loc[:,'confirm_code'].unique()
+#             if len(confirm_code) > 1:
+#                 st.error("Two confirmation codes for one trip have not been implemented yet.")
+#                 st.stop()
+#             else:
+#                 confirm_code = list(confirm_code)[0]
         
     if st.button("Submit"):
         if not current_loc:
