@@ -4,12 +4,15 @@ import sqlalchemy as sq
 import pandas as pd
 from apps import db_stuff as d
 
-def message_maker(data, data_type):
+def message_maker(data, data_type, num=0):
     '''
     Creates message + link to the flight tracker
     '''
     if data_type == 'track':
-        message = f"[Track this flight here](https://www.flightstats.com/v2/flight-tracker/{data['plane_code']}/{data['flight_num']}?year={data['year_depart']}&month={data['month_depart']}&date={data['day_depart']})!"
+        # Add next line to message if we want to specify date, but then 404 error if not within 1 week
+        # ?year={data['year_depart']}&month={data['month_depart']}&date={data['day_depart']}
+        
+        message = f"[Track flight {num+1} here](https://www.flightstats.com/v2/flight-tracker/{data['plane_code']}/{data['flight_num']})!"
 
         return message
     
@@ -66,18 +69,27 @@ def app():
         
     st.write("## Picking Pete up?")
     tickets, num = check_how_tickets()
-    
     if num == 0:
         st.info("No tickets were bought yet, check back later.")
-        
     else:
-        try:
-            for tick in range(1,num):
-                data = dict(tickets.iloc[tick,:])
-                with st.beta_expander(f"Ticket {tick}"):
-                    message = message_maker(data, data_type = 'track')
-                    st.write(message)
-                    st.image(f"images/ticket_{tick}.png", use_column_width='auto')
-        except:
-            ''
+        for code in tickets['confirm_code'].unique():
+            # assumes same day connections
+            data = tickets[tickets['confirm_code'] == code] 
+            date = pd.to_datetime(data['date_depart'].unique()[0]) # so that we can get date only
+            date = date.date()
+            date = date.strftime("%B %d")
+            
+            with st.beta_expander(f"Info for {date}"):
+                whole_message = ''
+                for tick in range(0,len(data)):
+                    message = message_maker(data.iloc[tick,:], data_type = 'track', num=tick)
+                    whole_message += f"""
+                    1. {message}
+                    """
+                st.write(whole_message)
+                for tick in range(0,len(data)):
+                    st.write(f"### Flight {tick+1}")
+                    st.image(f'images/ticket_{tick+1}.png', use_column_width='auto')
+                    
+
 app()
