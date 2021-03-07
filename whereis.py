@@ -39,7 +39,9 @@ def check_how_tickets():
     return tickets, len(tickets)
     
 def app():
-    st.title("Where in the world is Peter?")
+    name = 'Peter'
+    nickname = 'Pete'
+    st.title(f"Where in the world is {name}?")
     db = d.dbInfo()
     new_info = db.read_info(table='location')
     
@@ -63,11 +65,11 @@ def app():
     st.write(message)
         
     try:
-        st.image("images/pete.jpg",use_column_width='auto')
+        st.image(f"images/{nickname}.jpg",use_column_width='auto')
     except:
         st.error("No image found")
         
-    st.write("## Picking Pete up?")
+    st.write(f"## Picking {nickname} up?")
     tickets, num = check_how_tickets()
     if num == 0:
         st.info("No tickets were bought yet, check back later.")
@@ -77,7 +79,7 @@ def app():
             data = tickets[tickets['confirm_code'] == code] 
             date = pd.to_datetime(data['date_depart'].unique()[0]) # so that we can get date only
             date = date.date()
-            date = date.strftime("%B %d")
+            date = date.strftime("%B %d") # format date
             
             with st.beta_expander(f"Info for {date}"):
                 whole_message = ''
@@ -87,6 +89,7 @@ def app():
                     1. {message}
                     """
                 st.write(whole_message)
+                images = st.empty()
                 for tick in range(0,len(data)):
                     st.write(f"### Flight {tick+1}")
                     st.image(f'images/ticket_{tick+1}.png', use_column_width='auto')
