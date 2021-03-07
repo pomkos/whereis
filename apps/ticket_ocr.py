@@ -67,11 +67,14 @@ def info_extract(text_str,df_abbrev):
     }
 
     usa_airlines = df_abbrev[df_abbrev['Country'] == 'USA']
+    usa_airlines['Airline'] = usa_airlines['Airline'].str.replace(' Airlines','')
+    text_str = text_str.lower()
     for airline in usa_airlines['Airline']:
+        airline = airline.lower()
         if airline in text_str:
+            usa_airlines['Airline'] = usa_airlines['Airline'].str.lower()
             plane_code = list(usa_airlines[usa_airlines['Airline'] == airline]['IATA'])[0]
-            loc = text_str.find(airline) + len(airline)
-            flight_num = int(text_str[loc+1:loc+5])
+            flight_num = int(re.findall(('\d\d\d\d'),text_str)[0])
 
 
     date = re.findall('\d?\d:\d\d \w+ - \w+, (\w+ \d+)', text_str)[0]
@@ -80,11 +83,12 @@ def info_extract(text_str,df_abbrev):
     year = dt.datetime.now().year
     month_str = date[0]
     for x in months.keys():
-        if month_str in x:
+        if month_str.title() in x:
             month = months[x]
     day = date[1]
     
-    confirm_code = re.findall('Confirmation code ([A-Z]\w+)',text_str)[0]
+    confirm_code = re.findall('confirmation code ([a-z]\w+)',text_str)[0]
+
     date_str = f'{month}-{day}-{year} 23:59'
     date_depart = dt.datetime.strptime(date_str,'%m-%d-%Y %H:%M')
     
