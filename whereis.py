@@ -76,6 +76,7 @@ def app():
         st.info("No tickets were bought yet, check back later.")
     else:
         placeholder_dict = {}
+        counter = 0
         for code in tickets['confirm_code'].unique():
             # assumes same day connections
             data = tickets[tickets['confirm_code'] == code] 
@@ -92,14 +93,9 @@ def app():
                     """
                 st.write(whole_message)
                 for tick in range(0,len(data)):
+                    counter += 1
                     st.write(f"### Flight {tick+1}")
-                    placeholder_dict[f'image_{np.random.randint(0,num)}'] = st.empty()
-                for key in placeholder_dict.keys():
-                    placeholder_dict[key]
-        i = 0
-        for key in placeholder_dict.keys():
-            i+=1
-            placeholder_dict[key].image(f'images/ticket_{i}.png', use_column_width='auto')
+                    st.image(f'images/ticket_{counter}.png', use_column_width='auto')
                     
 
 app()
