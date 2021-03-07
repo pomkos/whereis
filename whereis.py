@@ -2,6 +2,7 @@ import streamlit as st
 import datetime as dt
 import sqlalchemy as sq
 import pandas as pd
+import numpy as np
 from apps import db_stuff as d
 
 def message_maker(data, data_type, num=0):
@@ -74,6 +75,7 @@ def app():
     if num == 0:
         st.info("No tickets were bought yet, check back later.")
     else:
+        placeholder_dict = {}
         for code in tickets['confirm_code'].unique():
             # assumes same day connections
             data = tickets[tickets['confirm_code'] == code] 
@@ -89,10 +91,15 @@ def app():
                     1. {message}
                     """
                 st.write(whole_message)
-                images = st.empty()
                 for tick in range(0,len(data)):
                     st.write(f"### Flight {tick+1}")
-                    st.image(f'images/ticket_{tick+1}.png', use_column_width='auto')
+                    placeholder_dict[f'image_{np.random.randint(0,num)}'] = st.empty()
+                for key in placeholder_dict.keys():
+                    placeholder_dict[key]
+        i = 0
+        for key in placeholder_dict.keys():
+            i+=1
+            placeholder_dict[key].image(f'images/ticket_{i}.png', use_column_width='auto')
                     
 
 app()
