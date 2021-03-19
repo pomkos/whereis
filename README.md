@@ -25,7 +25,7 @@ streamlit run settings.py # start the settings page
 1. Upload an Image: just upload it, nothing special required
 1. Upload Tickets
   1. Save a screenshot of your plane ticket, one at a time, with the confirmation code included
-    2. ![image](https://user-images.githubusercontent.com/8731022/111717359-46a4a300-882e-11eb-8a9e-6f7af17ff40d.png)
+    ![image](https://user-images.githubusercontent.com/8731022/111717359-46a4a300-882e-11eb-8a9e-6f7af17ff40d.png)
   * __NOTE:__ OCR was created and tested on MacOS. Assumes that the filename has datetime information when organizing pictures.
   * __NOTE:__ Wait until the running man in the top right stops, then close the tab. Tab must be closed and not refreshed or the picture will be processed again.
 2. Update Location: `NYC, NY`
