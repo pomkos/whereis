@@ -9,8 +9,10 @@ Simple webgui to update and present travel plans. Webgui thanks to the `streamli
 
 # Instructions
 
-1. Install prerequisites: `pip install -r requirements.txt`
-2. Initiate the db `python db_reset.py`
-3. Start the app: `streamlit run whereis.py`
-4. Start the admin page: `streamlit run settings.py`
-5. Follow the admin instructions
+
+```python
+pip install -r requirements.txt # install prereqs
+python db_reset.py # initiate sqlite database
+streamlit run whereis.py # start the main webpage
+streamlit run settings.py # start the settings page
+```
