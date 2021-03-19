@@ -5,7 +5,7 @@ Simple webgui to update and present travel plans. Webgui thanks to the `streamli
 * Uploaded tickets will be stored in images folder as `ticket_1.png` etc
 * Manually input where you are and where you plan to be, and when
 * Store above information in an sqlite db, so OCR and extraction is not done on each page reload
-* Present tracking info: https://www.flightstats.com/v2/flight-tracker/F9/1439
+* Present tracking info: https://www.flightstats.com/v2/flight-tracker/AA/5584
 
 # Instructions
 
