@@ -1,3 +1,8 @@
+# ToC
+1. [Description](#description)
+2. [Instructions](#instructions)
+3. [Screenshots](#preview)
+
 # Description
 Simple webgui to update and present travel plans. Webgui thanks to the `streamlit` package. Features include:
 
