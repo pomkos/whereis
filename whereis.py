@@ -5,6 +5,21 @@ import pandas as pd
 import numpy as np
 from apps import db_stuff as d
 
+hide_streamlit_style = """
+<style>
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+<script>
+  function addDarkmodeWidget() {
+    new Darkmode().showWidget();
+  }
+  window.addEventListener('load', addDarkmodeWidget);
+</script>
+
+"""
+
 def message_maker(data, data_type, num=0):
     '''
     Creates message + link to the flight tracker
@@ -44,6 +59,8 @@ def app():
     nickname = 'Pete'
     
     st.title(f"Where in the world is {name}?")
+    st.markdown(hide_streamlit_style, unsafe_allow_html=True) # hides the hamburger menu
+
     db = d.dbInfo()
     new_info = db.read_info(table='location')
     
