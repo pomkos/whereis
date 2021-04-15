@@ -3,4 +3,5 @@ pandas==1.2.2
 Pillow==8.1.0
 pytesseract==0.3.7
 streamlit==0.77.0
+pytest==6.2.3
 numpy
