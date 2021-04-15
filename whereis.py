@@ -83,15 +83,15 @@ def app():
 
     code = new_info.loc['confirm_code'].upper()
 
-
     message = message_maker([current_date, current_loc], DataType.CURRENT)
 
     future_date = future_date.split(';')
     future_loc = future_loc.split(";")
 
+    # TODO: If this isn't true should we raise an exception?
     if len(future_date) == len(future_loc):
-        for i in range(len(future_date)):
-            message += message_maker([future_date[i], future_loc[i]], DataType.FUTURE)
+        for future_date, future_loc in zip(future_date, future_loc):
+            message += message_maker([future_date, future_loc], DataType.FUTURE)
 
     st.write(message)
 
