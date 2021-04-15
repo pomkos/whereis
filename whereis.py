@@ -81,14 +81,14 @@ def app():
 
     code = new_info.loc['confirm_code'].upper()
 
-    message = message_maker([current_date, current_loc], data_type="loc_current")
+    message = message_maker([current_date, current_loc], DataType.CURRENT)
 
     future_date = future_date.split(';')
     future_loc = future_loc.split(";")
 
     if len(future_date) == len(future_loc):
         for i in range(len(future_date)):
-            message += message_maker([future_date[i], future_loc[i]], data_type="loc_future")
+            message += message_maker([future_date[i], future_loc[i]], DataType.FUTURE)
 
     st.write(message)
 
@@ -114,7 +114,7 @@ def app():
             with st.beta_expander(f"Info for {date}"):
                 whole_message = ''
                 for tick in range(0, len(data)):
-                    message = message_maker(data.iloc[tick, :], data_type='track', num=tick)
+                    message = message_maker(data.iloc[tick, :], DataType.TRACK, num=tick)
                     whole_message += f"""
                     1. {message}
                     """
