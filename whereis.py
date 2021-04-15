@@ -35,14 +35,16 @@ def message_maker(data, data_type: DataType, num=0):
         # Add next line to message if we want to specify date, but then 404 error if not within 1 week
         # ?year={data['year_depart']}&month={data['month_depart']}&date={data['day_depart']}
 
-        message = f"[Track flight {num + 1} here](https://www.flightstats.com/v2/flight-tracker/{data['plane_code']}/{data['flight_num']})!"
+        message = f"[Track flight {num+1} here](https://www.flightstats.com/v2/flight-tracker/{data['plane_code']}/{data['flight_num']})!"
 
         return message
+
 
     elif data_type == DataType.CURRENT:
         message = f"""
         * As of {data[0]} he is in __{data[1]}__."""
         return message
+
 
     elif data_type == DataType.FUTURE:
         message = f"""
@@ -62,7 +64,7 @@ def check_how_tickets():
 
     return tickets, len(tickets)
 
-
+  
 def app():
     name = 'Peter'
     nickname = 'Pete'
@@ -80,6 +82,7 @@ def app():
     current_loc = new_info.loc['current_loc'].title()
 
     code = new_info.loc['confirm_code'].upper()
+
 
     message = message_maker([current_date, current_loc], DataType.CURRENT)
 
@@ -110,7 +113,6 @@ def app():
             date = pd.to_datetime(data['date_depart'].unique()[0])  # so that we can get date only
             date = date.date()
             date = date.strftime("%B %d")  # format date
-
             with st.beta_expander(f"Info for {date}"):
                 whole_message = ''
                 for tick in range(0, len(data)):
@@ -125,4 +127,5 @@ def app():
                     st.image(f'images/ticket_{counter}.png', use_column_width='auto')
 
 
-app()
+if __name__ == '__main__':
+    app()
