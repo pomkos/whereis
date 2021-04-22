@@ -107,9 +107,10 @@ def app():
     else:
         placeholder_dict = {}
         counter = 0
-        for code in tickets['confirm_code'].unique():
+        all_dates = tickets['date_depart'].unique() # all dates that have tickets
+        for i in range(len(all_dates)):
             # assumes same day connections
-            data = tickets[tickets['confirm_code'] == code]
+            data = tickets[tickets['date_depart'] == all_dates[i]]
             date = pd.to_datetime(data['date_depart'].unique()[0])  # so that we can get date only
             date = date.date()
             date = date.strftime("%B %d")  # format date

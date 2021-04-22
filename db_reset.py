@@ -6,6 +6,9 @@ import datetime as dt
 import re
 
 def airline_abbrev_scrape():
+    '''
+    Saved for posterity. Scrapes and organizes airline abbreviations
+    '''
     # Read in airline abbreviations
     cols = ['Airline', 'Country', 'IATA/ICAO Codes']
     df = pd.DataFrame(columns = cols)
@@ -30,6 +33,8 @@ def airline_abbrev_scrape():
 
     # Add Frontier Airlines, which was missing from tables
     df = df.append({'Airline':'Frontier Airlines','Country':'USA','IATA':'F9','ICAO':'FFT'}, ignore_index=True)
+    df = df.append({'Airline':'Spirit','Country':'USA','IATA':'NK','ICAO':'NKS'}, ignore_index=True)
+    df = df.append({'Airline':'NK','Country':'USA','IATA':'NK','ICAO':'NKS'}, ignore_index=True) # 'Spirit' didn't appear in ticket
 
     # Remove spaces
     df['IATA'] = df['IATA'].str.strip()

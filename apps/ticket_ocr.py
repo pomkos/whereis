@@ -15,41 +15,6 @@ def ticket_ocr(my_flight_pic):
     text_str = tes.image_to_string(Image.open(my_flight_pic))
     return text_str
 
-def airline_abbrev_scrape():
-    '''
-    Saved for posterity. Scrapes and organizes airline abbreviations
-    '''
-    # Read in airline abbreviations
-    cols = ['Airline', 'Country', 'IATA/ICAO Codes']
-    df = pd.DataFrame(columns = cols)
-    airlines = {}
-
-    i = 0
-    for x in pd.read_html('https://abbreviations.yourdictionary.com/articles/airline-abbreviations-for-major-carriers.html',header=0):
-        i += 1
-        try:
-            x.columns = cols # some columns had spaces in them
-        except:
-            pass
-        airlines[i] = x
-
-    for i in [1,2,3,4,5,6,7]:
-        df = df.append(airlines[i])
-
-    # Split code types
-    new = df['IATA/ICAO Codes'].str.split('/', expand = True)
-    new.columns = ['IATA', 'ICAO']
-    df = pd.concat([df, new], axis=1).drop('IATA/ICAO Codes',axis=1)
-
-    # Add Frontier Airlines, which was missing from tables
-    df = df.append({'Airline':'Frontier Airlines','Country':'USA','IATA':'F9','ICAO':'FFT'}, ignore_index=True)
-
-    # Remove spaces
-    df['IATA'] = df['IATA'].str.strip()
-    return df
-
-
-
 def info_extract(text_str,df_abbrev):
     months = {
         'January':'01',
@@ -74,7 +39,7 @@ def info_extract(text_str,df_abbrev):
         if airline in text_str:
             usa_airlines['Airline'] = usa_airlines['Airline'].str.lower()
             plane_code = list(usa_airlines[usa_airlines['Airline'] == airline]['IATA'])[0]
-            flight_num = int(re.findall(('\d\d\d\d'),text_str)[0])
+            flight_num = int(re.findall(('\d\d\d\d?'),text_str)[0])
 
 
     date = re.findall('\d?\d:\d\d \w+ - \w+, (\w+ \d+)', text_str)[0]
