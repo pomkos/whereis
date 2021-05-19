@@ -40,9 +40,8 @@ def info_extract(text_str,df_abbrev):
             usa_airlines['Airline'] = usa_airlines['Airline'].str.lower()
             plane_code = list(usa_airlines[usa_airlines['Airline'] == airline]['IATA'])[0]
             flight_num = int(re.findall(('\d\d\d\d?'),text_str)[0])
-
-
-    date = re.findall('\d?\d:\d\d \w+ - \w+, (\w+ \d+)', text_str)[0]
+    # sometimes Googles likes to mess with us and uses a : instead of a - to separate date from time
+    date = re.findall('\d?\d:\d\d \w+ :?-? \w+, (\w+ \d+)', text_str)[0] 
     date = date.split(' ')
 
     year = dt.datetime.now().year

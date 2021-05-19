@@ -95,11 +95,35 @@ def app():
 
     st.write(message)
 
+
     try:
         st.image(f"images/{nickname.lower()}.jpg", use_column_width='auto')
     except:
         st.error("No image found")
+    st.success("He got his second Pfizer shot on April 26!")
+    with st.beta_expander("Vaccine info"):
+        st.write("""
+        💉 __First shot__
 
+        * ✅ He felt no side effects throughout the 3 weeks 
+
+        💉 __Second shot__
+        
+        *Day 1*
+        * :coffee: He felt no side effects the day of the shot 
+        * 💪 His arm felt sore (2/10) when he woke up at 7am the morning after his second shot
+        * ❄️ He noticed he felt slightly more sensitive (2/10) to cold/heat at 730am
+        * 😳 At around 10am sensitivity to textures and sound went up to 4.5/10
+        * 💤 He took an hour nap at 11am. The warmth felt REALLY good 10/10
+        * ⏰ He woke up at 12pm and sensitivity went to 2/10
+        * 🥱 By 3pm he got pretty fatigued, sensitivity 3/10, but arm no longer sore
+        * 💤 He took an hour nap at 4pm outside
+        * 💪 By 6pm muscles were aching 3/10, especially the lower back 5/10
+        * 💪 He went to bed at 930, still aching
+
+        *Day 2*
+        * 🤕 He woke up at 540 am, symptoms completely gone except a slight headache 2/10
+        """)
     st.write(f"## Picking {nickname} up?")
     tickets, num = check_how_tickets()
     if num == 0:
