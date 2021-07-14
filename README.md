@@ -27,13 +27,17 @@ streamlit run settings.py # start the settings page
 
 * Upload an Image
   * Just upload it, nothing special required
-3. Upload Tickets
-  1. Save a screenshot of your plane ticket, one at a time, with the confirmation code included
+* Upload Tickets
+  * Save a screenshot of your plane ticket, one at a time, with the confirmation code included
     ![image](https://user-images.githubusercontent.com/8731022/111717359-46a4a300-882e-11eb-8a9e-6f7af17ff40d.png)
   * __NOTE:__ OCR assumes that tickets were saves alphabetically, so image "a.jpg" will appear as Flight 1 and "b.jpg" as Flight 2.
   * __NOTE:__ Wait until the running man in the top right stops, then close the tab. Tab must be closed and not refreshed or the picture will be processed again.
-2. Update Location: `NYC, NY`
-3. Update Plans: location as `Los Angeles; Miami, FL` with date in same order `March 2; June 2, 2022` then click submit.
+* Update Location
+  * Format: `NYC, NY`
+* Update Plans
+  * location as `Los Angeles; Miami, FL` <- note separation by `;`
+  * date in same order `March 2; June 2, 2022` <- note separation by `;`
+  * click submit.
 
 # Preview
 
