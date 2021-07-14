@@ -25,8 +25,8 @@ streamlit run settings.py # start the settings page
 
 ## Update the Main Page
 
-1. Upload an Image
-  1. Just upload it, nothing special required
+* Upload an Image
+  * Just upload it, nothing special required
 3. Upload Tickets
   1. Save a screenshot of your plane ticket, one at a time, with the confirmation code included
     ![image](https://user-images.githubusercontent.com/8731022/111717359-46a4a300-882e-11eb-8a9e-6f7af17ff40d.png)
