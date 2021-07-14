@@ -28,8 +28,9 @@ streamlit run settings.py # start the settings page
 * Upload an Image
   * Just upload it, nothing special required
 * Upload Tickets
-  * Save a screenshot of your plane ticket, one at a time, with the confirmation code included
+  * Save a screenshot of your plane ticket, one at a time to your desktop, with the confirmation code included
     ![image](https://user-images.githubusercontent.com/8731022/111717359-46a4a300-882e-11eb-8a9e-6f7af17ff40d.png)
+  * Drag and drop all plane tickets at once to the appropriate section of settings page
   * __NOTE:__ OCR assumes that tickets were saves alphabetically, so image "a.jpg" will appear as Flight 1 and "b.jpg" as Flight 2.
   * __NOTE:__ Wait until the running man in the top right stops, then close the tab. Tab must be closed and not refreshed or the picture will be processed again.
 * Update Location
