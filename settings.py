@@ -10,9 +10,9 @@ def app():
     st.title("Admin Page")
     col1,col2 = st.beta_columns(2)
     with col1:
-        my_pics = st.file_uploader("Upload plane ticket",type=['png','jpg'], accept_multiple_files = True)
+        my_pics = st.file_uploader("Upload plane ticket",type=['png','jpg', 'jpeg'], accept_multiple_files = True)
     with col2:
-        profile_pic = st.file_uploader("Upload new profile pic", type=['png','jpg'])
+        profile_pic = st.file_uploader("Upload new profile pic", type=['png','jpg', 'jpeg'])
     # current info
     current_loc = st.text_input("Where are you?")
     current_date = dt.datetime.now()
