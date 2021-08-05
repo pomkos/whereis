@@ -97,7 +97,7 @@ def app():
 
 
     try:
-        st.image(f"images/{nickname.lower()}.jpg", use_column_width='auto')
+        st.image(f"images/profile.jpg", use_column_width='auto')
     except:
         st.error("No image found")
     st.write(f"## Picking {nickname} up?")

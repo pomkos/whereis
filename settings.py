@@ -22,7 +22,7 @@ def app():
     future_date = st.text_input("When?")
     
     if profile_pic:
-        with open("images/pete.jpg","wb") as f:
+        with open("images/profile.jpg","wb") as f:
             f.write(profile_pic.getvalue())
         st.success("Saved!")
         
