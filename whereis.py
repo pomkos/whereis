@@ -114,7 +114,7 @@ def app():
             date = pd.to_datetime(data['date_depart'].unique()[0])  # so that we can get date only
             date = date.date()
             date = date.strftime("%B %d")  # format date
-            with st.beta_expander(f"Info for {date}"):
+            with st.expander(f"Info for {date}"):
                 whole_message = ''
                 for tick in range(0, len(data)):
                     message = message_maker(data.iloc[tick, :], DataType.TRACK, num=tick)
