@@ -48,5 +48,4 @@ class dbInfo():
             return tickets
         elif table == 'airline_info':
             airline = pd.read_sql("airline_info",con=self.cnx)
-            airline = airline[airline['Country'] == 'USA']
             return airline

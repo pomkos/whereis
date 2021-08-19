@@ -8,7 +8,7 @@ def app():
     Upload status and files
     '''    
     st.title("Admin Page")
-    col1,col2 = st.beta_columns(2)
+    col1,col2 = st.columns(2)
     with col1:
         my_pics = st.file_uploader("Upload plane ticket",type=['png','jpg', 'jpeg'], accept_multiple_files = True)
     with col2:

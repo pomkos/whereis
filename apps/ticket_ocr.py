@@ -30,16 +30,20 @@ def info_extract(text_str,df_abbrev):
         'November':'11',
         'December':'12'
     }
-
-    usa_airlines = df_abbrev[df_abbrev['Country'] == 'USA']
+    usa_airlines = df_abbrev
     usa_airlines['Airline'] = usa_airlines['Airline'].str.replace(' Airlines','')
     text_str = text_str.lower()
+    airline_there = False
     for airline in usa_airlines['Airline']:
         airline = airline.lower()
         if airline in text_str:
+            airline_there = True # flip the switch
             usa_airlines['Airline'] = usa_airlines['Airline'].str.lower()
             plane_code = list(usa_airlines[usa_airlines['Airline'] == airline]['IATA'])[0]
             flight_num = int(re.findall(('\d\d\d\d?'),text_str)[0])
+    if not airline_there:
+        st.warning("Airline not in current database, tell Pete")
+        st.stop()
     # sometimes Googles likes to mess with us and uses a : instead of a - to separate date from time
     date = re.findall('\d?\d:\d\d \w+ :?-? \w+, (\w+ \d+)', text_str)[0] 
     date = date.split(' ')
@@ -51,7 +55,10 @@ def info_extract(text_str,df_abbrev):
             month = months[x]
     day = date[1]
     
-    confirm_code = re.findall('confirmation code ([a-z]\w+)',text_str)[0]
+    try:
+        confirm_code = re.findall('confirmation code ([a-z]\w+)',text_str)[0]
+    except: # sometimes confirmation code is pure numbers
+        confirm_code = re.findall('confirmation code (\d+)', text_str)[0]
 
     date_str = f'{month}-{day}-{year} 23:59'
     date_depart = dt.datetime.strptime(date_str,'%m-%d-%Y %H:%M')
@@ -74,7 +81,6 @@ def app(num_files):
     db = db_stuff.dbInfo()
     
     df_abbrev = db.read_info('airline_info')
-    
     ticket_extract = {}
     i = 0
     for ticket in tickets.keys():
