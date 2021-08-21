@@ -1,3 +1,5 @@
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://whereis.peti.work)
+
 # ToC
 1. [Description](#description)
 2. [Instructions](#instructions)
