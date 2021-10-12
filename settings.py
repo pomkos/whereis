@@ -2,7 +2,7 @@ import streamlit as st # type: ignore
 import datetime as dt
 from apps import db_stuff as d
 from apps import ticket_ocr
-from typing import Tuple, Union
+from typing import Tuple, Union, List, Any
 
 
 ### Helpers
@@ -11,6 +11,22 @@ def save_image(image_name: str, image_file, message: str) -> None:
         f.write(image_file.getvalue())
 
     st.success(message)
+
+def process_tickets(ticket_list: List[Any], ocr: bool = False) -> None:
+    pic_dict = {}
+    for pic in ticket_list:
+        pic_name = pic.name
+        pic_dict[pic_name] = pic
+        
+        # pic_type = pic.type
+        # pic_size = pic.size
+    i = 0     
+    for pic in sorted(pic_dict):
+        i += 1
+        save_image(f"ticket_{i}.png", pic_dict[pic], message=f"Ticket_{i} saved!")
+    
+    if ocr:
+        ticket_ocr.app(num_files = len(ticket_list))
 
 
 def get_basic_info(db: d.dbInfo) -> Union[Tuple[str, str, str], None]:
@@ -54,6 +70,7 @@ def manual_settings(db: d.dbInfo) -> Tuple[str, str, str]:
 
     with st.form('ticket_info'):
         st.write("### __Submit Ticket Info__")
+        ticket_pics = st.file_uploader('Upload Ticket(s)', type = ['png', 'jpg','jpeg'], accept_multiple_files=True)
         col1, col2 = st.columns(2)
         with col1:
             airline = st.selectbox("Airline", options = airline_options)
@@ -67,6 +84,9 @@ def manual_settings(db: d.dbInfo) -> Tuple[str, str, str]:
 
     if not ticket_submit:
         st.stop()
+
+    if len(ticket_pics) != 0:
+        process_tickets(ticket_list=ticket_pics, ocr=False)
 
     plane_code = airline_iata_map[airline]
     year_depart = date_depart.year
@@ -98,18 +118,7 @@ def auto_settings(db: d.dbInfo) -> None:
         st.stop()
     # run OCR
     if len(my_pics) != 0:
-        pic_dict = {}
-        for pic in my_pics:
-            pic_name = pic.name
-            pic_dict[pic_name] = pic
-            
-            # pic_type = pic.type
-            # pic_size = pic.size
-        i = 0     
-        for pic in sorted(pic_dict):
-            i += 1
-            save_image(f"ticket_{i}", pic_dict[pic], message=f"Ticket_{i} saved!")
-        ticket_ocr.app(num_files = len(my_pics))
+        process_tickets(ticket_list = my_pics, ocr = True)
     # otherwise get info from db
     else:
         df = db.read_info('ticket_info')
