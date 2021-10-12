@@ -74,7 +74,8 @@ def manual_settings(db: d.dbInfo) -> None:
 
     with st.form('ticket_info'):
         st.write("### __Submit Ticket Info__")
-        ticket_pics = st.file_uploader('Upload Ticket', type = ['png', 'jpg','jpeg'], accept_multiple_files=False)
+        # in list for compatibility with functions
+        ticket_pics = [st.file_uploader('Upload Ticket', type = ['png', 'jpg','jpeg'], accept_multiple_files=False)]
         col1, col2, col3 = st.columns(3)
         with col1:
             ticket_num = st.number_input('This is ticket number', min_value=1)
@@ -93,6 +94,9 @@ def manual_settings(db: d.dbInfo) -> None:
 
     if len(ticket_pics) != 0:
         process_tickets(ticket_list=ticket_pics, ocr=False, ticket_num=ticket_num)
+    else:
+        st.warning("Please upload a screenshot of the ticket")
+        st.stop()
 
     plane_code = airline_iata_map[airline]
     year_depart = date_depart.year
