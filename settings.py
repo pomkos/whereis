@@ -12,18 +12,22 @@ def save_image(image_name: str, image_file, message: str) -> None:
 
     st.success(message)
 
-def process_tickets(ticket_list: List[Any], ocr: bool = False) -> None:
-    pic_dict = {}
-    for pic in ticket_list:
-        pic_name = pic.name
-        pic_dict[pic_name] = pic
-        
-        # pic_type = pic.type
-        # pic_size = pic.size
-    i = 0     
-    for pic in sorted(pic_dict):
-        i += 1
-        save_image(f"ticket_{i}.png", pic_dict[pic], message=f"Ticket_{i} saved!")
+def process_tickets(ticket_list: List[Any], ocr: bool = False, ticket_num: Union[int, None] = None) -> None:
+    if not ticket_num:
+        pic_dict = {}
+        for pic in ticket_list:
+            pic_name = pic.name
+            pic_dict[pic_name] = pic
+            
+            # pic_type = pic.type
+            # pic_size = pic.size
+        i = 0
+
+        for pic in sorted(pic_dict):
+            i += 1
+            save_image(f"ticket_{i}.png", pic_dict[pic], message=f"Ticket_{i} saved!")
+    else:
+        save_image(f"ticket_{ticket_num}.png", ticket_list[0], message=f"Ticket_{ticket_num} saved!")
     
     if ocr:
         ticket_ocr.app(num_files = len(ticket_list))
@@ -70,11 +74,13 @@ def manual_settings(db: d.dbInfo) -> None:
 
     with st.form('ticket_info'):
         st.write("### __Submit Ticket Info__")
-        ticket_pics = st.file_uploader('Upload Ticket(s)', type = ['png', 'jpg','jpeg'], accept_multiple_files=True)
-        col1, col2 = st.columns(2)
+        ticket_pics = st.file_uploader('Upload Ticket', type = ['png', 'jpg','jpeg'], accept_multiple_files=False)
+        col1, col2, col3 = st.columns(3)
         with col1:
-            airline = st.selectbox("Airline", options = airline_options)
+            ticket_num = st.number_input('This is ticket number', min_value=1)
         with col2:
+            airline = st.selectbox("Airline", options = airline_options)
+        with col3:
             flight_num = st.number_input('Flight Number', min_value=0)
 
         date_depart = st.date_input('Date of Departure')
@@ -86,7 +92,7 @@ def manual_settings(db: d.dbInfo) -> None:
         st.stop()
 
     if len(ticket_pics) != 0:
-        process_tickets(ticket_list=ticket_pics, ocr=False)
+        process_tickets(ticket_list=ticket_pics, ocr=False, ticket_num=ticket_num)
 
     plane_code = airline_iata_map[airline]
     year_depart = date_depart.year
