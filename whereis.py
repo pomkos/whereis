@@ -73,7 +73,7 @@ def app():
     st.markdown(hide_streamlit_style, unsafe_allow_html=True)  # hides the hamburger menu
 
     db = d.dbInfo()
-    new_info = db.read_info(table='location')
+    new_info = db.read_info(table_name='location')
 
     future_loc = new_info.loc['future_loc'].title()
     future_date = new_info.loc['future_date'].title()

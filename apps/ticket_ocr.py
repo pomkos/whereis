@@ -1,7 +1,8 @@
-import pandas as pd
-import streamlit as st
+import pandas as pd # type: ignore
+import streamlit as st # type: ignore
 import re
 import datetime as dt
+from typing import Tuple
 
 def ticket_ocr(my_flight_pic):
     '''
@@ -15,7 +16,7 @@ def ticket_ocr(my_flight_pic):
     text_str = tes.image_to_string(Image.open(my_flight_pic))
     return text_str
 
-def info_extract(text_str,df_abbrev):
+def info_extract(text_str: str, df_abbrev: pd.DataFrame) -> Tuple[str, int, int, str, str, str, dt.datetime]:
     months = {
         'January':'01',
         'February':'02',
@@ -63,11 +64,10 @@ def info_extract(text_str,df_abbrev):
     date_str = f'{month}-{day}-{year} 23:59'
     date_depart = dt.datetime.strptime(date_str,'%m-%d-%Y %H:%M')
     
-    results = [plane_code, flight_num, year, month, day, confirm_code, date_depart]
     
-    return results
+    return plane_code, flight_num, year, month, day, confirm_code, date_depart
 
-def app(num_files):
+def app(num_files: int) -> None:
     '''
     Only function is to start the extraction process.
     '''
@@ -80,14 +80,15 @@ def app(num_files):
     from apps import db_stuff
     db = db_stuff.dbInfo()
     
-    df_abbrev = db.read_info('airline_info')
+    abbrev_df = db.read_info('airline_info')
     ticket_extract = {}
     i = 0
     for ticket in tickets.keys():
         i += 1
-        data = info_extract(tickets[ticket], df_abbrev)
+        data = info_extract(tickets[ticket], abbrev_df)
         ticket_extract[f'ticket_{i}'] = data
     
     
     for ticket in ticket_extract.keys():
+        st.write(ticket_extract[ticket])
         db.write_info('ticket_info',ticket_extract[ticket]) # save extracted ocr into db

@@ -31,10 +31,10 @@ def airline_abbrev_scrape():
     new.columns = ['IATA', 'ICAO']
     df = pd.concat([df, new], axis=1).drop('IATA/ICAO Codes',axis=1)
 
-    # Add Frontier Airlines, which was missing from tables
+    # Add airlines missing from tables
     df = df.append({'Airline':'Frontier Airlines','Country':'USA','IATA':'F9','ICAO':'FFT'}, ignore_index=True)
     df = df.append({'Airline':'Spirit','Country':'USA','IATA':'NK','ICAO':'NKS'}, ignore_index=True)
-    df = df.append({'Airline':'NK','Country':'USA','IATA':'NK','ICAO':'NKS'}, ignore_index=True) # 'Spirit' didn't appear in ticket
+    df = df.append({'Airline':'JetBlue','Country':'USA','IATA':'B6','ICAO':'JBU'}, ignore_index=True)
 
     # Remove spaces
     df['IATA'] = df['IATA'].str.strip()
