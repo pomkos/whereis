@@ -8,8 +8,8 @@ def ticket_ocr(my_flight_pic):
     '''
     Use OCR to extract information from an image. Extracts flight info from uploaded pic
     '''
-    import pytesseract as tes
-    from PIL import Image
+    import pytesseract as tes # type: ignore
+    from PIL import Image # type: ignore
     import pandas as pd
     # process the image
     

@@ -1,6 +1,6 @@
-import streamlit as st
+import streamlit as st # type: ignore
 import datetime as dt
-import pandas as pd
+import pandas as pd # type: ignore
 
 from apps import db_stuff as d
 from enum import Enum

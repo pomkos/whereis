@@ -55,7 +55,7 @@ def get_basic_info(db: d.dbInfo) -> Union[Tuple[str, str, str], None]:
     return None
 
 ### Logic
-def manual_settings(db: d.dbInfo) -> Tuple[str, str, str]:
+def manual_settings(db: d.dbInfo) -> None:
     '''
     Allow user to send in travel info by filling out a form
     '''
