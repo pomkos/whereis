@@ -35,7 +35,7 @@ def airline_abbrev_scrape():
     df = df.append({'Airline':'Frontier Airlines','Country':'USA','IATA':'F9','ICAO':'FFT'}, ignore_index=True)
     df = df.append({'Airline':'Spirit','Country':'USA','IATA':'NK','ICAO':'NKS'}, ignore_index=True)
     df = df.append({'Airline':'JetBlue','Country':'USA','IATA':'B6','ICAO':'JBU'}, ignore_index=True)
-
+    df = df.append({'Airline':'Qatar Airways','Country':'Jordan','IATA':'QR','ICAO':'QTR'}, ignore_index=True)
     # Remove spaces
     df['IATA'] = df['IATA'].str.strip()
     return df
