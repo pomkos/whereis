@@ -164,19 +164,80 @@ def store_location_info(current_loc: str, future_loc: str, future_date: str, con
         #st.error("An error occurred. Might be worth investigating.")
         #st.stop()
 
+def add_airline(db: d.dbInfo) -> None:
+    '''
+    GUI to allow user to add airline info to db
+    '''
+    
+    st.write('## Submit New Airline')
+    with st.expander('All airline data'):
+        st.write(db.read_info('airline_info'))
+
+    with st.form('airline_info'):
+        airline = st.text_input('Airline Name').title().strip()
+        col1, col2 = st.columns(2)
+        with col1:
+            iata = st.text_input('IATA Code').upper().strip()
+        with col2:
+            icao = st.text_input('ICAO Code').upper().strip()
+        country = st.text_input('Country', help='Country where headquarters are located').title().strip()
+
+        submit = st.form_submit_button('Submit')
+    
+    if not submit:
+        st.stop()
+    
+    airline_data = [
+        airline,
+        country,
+        iata,
+        icao
+    ]
+
+    if not no_duplicate_airline_data(airline_data, db):
+        st.stop()
+
+    try:
+        db.write_info(table_name = 'airline_info', data = airline_data)
+        st.success('Submitted!')
+    except:
+        st.error('An error occurred')
+
+def no_duplicate_airline_data(airline_data: List[str], db: d.dbInfo) -> bool:
+    '''
+    Checks whether the airline data has been added before
+    '''
+    df = db.read_info('airline_info')
+    if airline_data[0].lower() in df['Airline'].str.lower().tolist():
+        st.error('Airline already in dataframe')
+        return False
+    
+    elif airline_data[2].lower() in df['IATA'].str.lower().tolist():
+        st.error('IATA already in dataframe')
+        return False
+    
+    elif airline_data[3].lower() in df['ICAO'].str.lower().tolist():
+        st.error('ICAO already in dataframe')
+        return False
+    
+    else:
+        return True
+    
 
 def app():
     '''
     GUI to upload status and files
     '''    
     st.title("Admin Page")
-    display = st.sidebar.radio('Choose an action', options = ['Location Info', 'Ticket OCR', 'Ticket Manual'])
+    display = st.sidebar.radio('Choose an action', options = ['Location Info', 'Ticket OCR', 'Ticket Manual', 'Add Airline to DB'])
     db = d.dbInfo()
 
     if display == 'Ticket OCR':
         auto_settings(db)
     elif display == 'Ticket Manual':
         manual_settings(db)
+    elif display == 'Add Airline to DB':
+        add_airline(db)
     else:
         get_basic_info(db)
     

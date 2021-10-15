@@ -17,7 +17,7 @@ class dbInfo():
         self.cnx = cnx
         self.meta = meta
         
-    def write_info(self, table_name: Literal['location', 'ticket_info'], data: Any) -> None:
+    def write_info(self, table_name: Literal['location', 'ticket_info', 'airline_info'], data: Any) -> None:
         '''
         Writes everything in the {data} list to {table_name} in db
 
@@ -29,16 +29,18 @@ class dbInfo():
             The data to be saved to the table. Must be a list of one of below, with variables in that order:
                 - current_loc, future_loc, future_date, confirm_code, message
                 - plane_code, flight_num, year_depart, month_depart, day_depart, confirm_code, date_depart
+                - airline, country, iata, icao
         '''
         table = self.meta.tables[table_name]
         if table_name == 'location':
             current_loc, future_loc, future_date, confirm_code, message = data
-            query = sq.insert(table).values(current_loc = current_loc, 
-                                           current_date = dt.datetime.now().date(),
-                                           future_loc = future_loc,
-                                           future_date = future_date,
-                                           confirm_code = confirm_code,
-                                           message = message
+            query = sq.insert(table).values(
+                current_loc = current_loc, 
+                current_date = dt.datetime.now().date(),
+                future_loc = future_loc,
+                future_date = future_date,
+                confirm_code = confirm_code,
+                message = message
                                           )
         elif table_name == 'ticket_info':
             plane_code, flight_num, year_depart, month_depart, day_depart, confirm_code, date_depart = data
@@ -51,6 +53,14 @@ class dbInfo():
                 confirm_code = confirm_code,
                 date_depart = date_depart,
                 date_added = dt.datetime.now()
+            )
+        elif table_name == 'airline_info':
+            airline, country, iata, icao = data
+            query = sq.insert(table).values(
+                Airline = airline,
+                Country = country,
+                IATA = iata,
+                ICAO = icao
             )
         ResultProxy = self.cnx.execute(query)
         
