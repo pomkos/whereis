@@ -33,26 +33,29 @@ def process_tickets(ticket_list: List[Any], ocr: bool = False, ticket_num: Union
         ticket_ocr.app(num_files = len(ticket_list))
 
 
-def get_basic_info(db: d.dbInfo) -> Union[Tuple[str, str, str], None]:
+def get_basic_info(db: d.dbInfo) -> None:
     '''
     Gathers location, date, and profile pic from user
     '''
+    with st.form('profile_pic'):
+        profile_pic = st.file_uploader("Upload new profile pic", type=['png', 'jpg', 'jpeg'])
+        submit_pic = st.form_submit_buttom('Submit')
+
     with st.form('basic_info'):
         st.write("### __Submit Basic Info__")
-        profile_pic = st.file_uploader("Upload new profile pic", type=['png', 'jpg', 'jpeg'])
         # current info
         current_loc = st.text_input("Where are you?")
         current_date = dt.datetime.now()
-        
+
         # future info
         future_loc = st.text_input("Where are you going?")
         future_date = st.text_input("When?")
-        submit = st.form_submit_button('Submit')
+        submit_info = st.form_submit_button('Submit')
 
-    if submit:
-        # save if pic uploaded
-        if profile_pic:
-            save_image('profile.jpg', profile_pic, 'New profile pic saved!')
+    if submit_pic:
+        save_image('profile.jpg', profile_pic, 'New profile pic saved!')
+
+    if submit_info:
         confirm_code = 'None'
         store_location_info(current_loc, future_loc, future_date, confirm_code, db)
 
