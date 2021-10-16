@@ -39,7 +39,7 @@ def get_basic_info(db: d.dbInfo) -> None:
     '''
     with st.form('profile_pic'):
         profile_pic = st.file_uploader("Upload new profile pic", type=['png', 'jpg', 'jpeg'])
-        submit_pic = st.form_submit_buttom('Submit')
+        submit_pic = st.form_submit_button('Submit')
 
     with st.form('basic_info'):
         st.write("### __Submit Basic Info__")
