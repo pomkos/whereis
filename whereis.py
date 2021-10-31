@@ -4,7 +4,7 @@ import pandas as pd # type: ignore
 
 from apps import db_stuff as d
 from enum import Enum
-from typing import List
+from typing import List, Tuple
 
 hide_streamlit_style = """
 <style>
