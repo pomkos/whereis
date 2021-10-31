@@ -1,8 +1,8 @@
 import streamlit as st # type: ignore
 import datetime as dt
 from apps import db_stuff as d
-from apps import ticket_ocr
-import pandas as pd
+from apps import ticket_ocr  
+import pandas as pd # type: ignore
 from typing import Tuple, Union, List, Any
 
 
@@ -80,7 +80,7 @@ def manual_settings(db: d.dbInfo) -> None:
     Allow user to send in travel info by filling out a form
     '''
     with st.expander("Current info"):
-        st.table(check_how_many_tickets()[0])
+        st.write(check_how_many_tickets()[0])
     
     airline_info = db.read_info('airline_info')
     airline_info = airline_info.dropna(subset = ['IATA'])
