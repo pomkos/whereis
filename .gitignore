@@ -132,3 +132,4 @@ dmypy.json
 .DS_Store
 images/ticket_4.png
 .gitignore
+data/home_message.txt

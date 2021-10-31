@@ -1,3 +1,4 @@
+from google.protobuf import message
 import streamlit as st # type: ignore
 import datetime as dt
 from apps import db_stuff as d
@@ -44,11 +45,20 @@ def process_tickets(ticket_list: List[Any], ocr: bool = False, ticket_num: Union
     if ocr:
         ticket_ocr.app(num_files = len(ticket_list))
 
+def message_to_viewers() -> None:
+    '''
+    Post a little message below the headng
+    '''
+    message = st.text_input("What would you like to say?", help="To not show anything submit ' ' as a message")
+    if message:
+        with open('data/home_message.txt', 'w') as f:
+            f.write(message)
 
 def get_basic_info(db: d.dbInfo) -> None:
     '''
     Gathers location, date, and profile pic from user
     '''
+    message_to_viewers()
     with st.form('profile_pic'):
         st.write("### __Upload a Picture__")
         profile_pic = st.file_uploader("Upload new profile pic", type=['png', 'jpg', 'jpeg'])

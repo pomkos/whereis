@@ -65,13 +65,24 @@ def check_how_many_tickets() -> Tuple[pd.DataFrame, int]:
 
     return tickets, len(tickets)
 
-  
+def check_for_custom_message() -> List[str]:
+    with open("data/home_message.txt", "r") as f:
+        custom_message = f.readlines()
+    return custom_message
+
 def app():
     name = 'Peter'
     nickname = 'Pete'
 
     st.title(f"Where in the world is {name}?")
     st.markdown(hide_streamlit_style, unsafe_allow_html=True)  # hides the hamburger menu
+    custom_message = check_for_custom_message()
+
+    if (len(custom_message) > 0) & (custom_message[0] not in ["''", "' '"]):
+        readable = ''
+        for line in custom_message:
+            readable += line
+        st.write(readable)
 
     db = d.dbInfo()
     new_info = db.read_info(table_name='location')
