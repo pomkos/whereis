@@ -2,6 +2,7 @@ import streamlit as st # type: ignore
 import datetime as dt
 from apps import db_stuff as d
 from apps import ticket_ocr
+import pandas as pd
 from typing import Tuple, Union, List, Any
 
 
@@ -11,6 +12,17 @@ def save_image(image_name: str, image_file, message: str) -> None:
         f.write(image_file.getvalue())
 
     st.success(message)
+
+def check_how_many_tickets() -> Tuple[pd.DataFrame, int]:
+    '''
+    Double checks how many tickets to show and generate links for
+    '''
+    db = d.dbInfo()
+    tickets = db.read_info('ticket_info')
+
+    tickets = tickets[tickets['date_depart'] >= dt.datetime.now()]
+
+    return tickets, len(tickets)
 
 def process_tickets(ticket_list: List[Any], ocr: bool = False, ticket_num: Union[int, None] = None) -> None:
     if not ticket_num:
@@ -38,6 +50,7 @@ def get_basic_info(db: d.dbInfo) -> None:
     Gathers location, date, and profile pic from user
     '''
     with st.form('profile_pic'):
+        st.write("### __Upload a Picture__")
         profile_pic = st.file_uploader("Upload new profile pic", type=['png', 'jpg', 'jpeg'])
         submit_pic = st.form_submit_button('Submit')
 
@@ -48,8 +61,8 @@ def get_basic_info(db: d.dbInfo) -> None:
         current_date = dt.datetime.now()
 
         # future info
-        future_loc = st.text_input("Where are you going?")
-        future_date = st.text_input("When?")
+        future_loc = st.text_input("Where are you going?", help='Separate each destination by ;')
+        future_date = st.text_input("When?", help='Separate each date by ;')
         submit_info = st.form_submit_button('Submit')
 
     if submit_pic:
@@ -66,6 +79,9 @@ def manual_settings(db: d.dbInfo) -> None:
     '''
     Allow user to send in travel info by filling out a form
     '''
+    with st.expander("Current info"):
+        st.table(check_how_many_tickets()[0])
+    
     airline_info = db.read_info('airline_info')
     airline_info = airline_info.dropna(subset = ['IATA'])
     airline_options = airline_info['Airline'].tolist()
@@ -75,13 +91,19 @@ def manual_settings(db: d.dbInfo) -> None:
     for idx, row in airline_info.iterrows():
         airline_iata_map[row['Airline']] = row['IATA']
 
+    with st.form('ticket_pics'):
+        st.write("### __Upload Ticket Screenshot__")
+        ticket_pics = st.file_uploader('Upload Tickets', type = ['png', 'jpg','jpeg'], accept_multiple_files=True)
+        ticket_num = st.number_input('This is ticket number', min_value=1)
+        ticket_pics_submit = st.form_submit_button('Submit')
+    
+    if ticket_pics_submit:
+        process_tickets(ticket_list=ticket_pics, ocr=False, ticket_num=ticket_num)
+
     with st.form('ticket_info'):
         st.write("### __Submit Ticket Info__")
         # in list for compatibility with functions
-        ticket_pics = [st.file_uploader('Upload Ticket', type = ['png', 'jpg','jpeg'], accept_multiple_files=False)]
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            ticket_num = st.number_input('This is ticket number', min_value=1)
+        col2, col3 = st.columns(2)
         with col2:
             airline = st.selectbox("Airline", options = airline_options)
         with col3:
@@ -90,32 +112,24 @@ def manual_settings(db: d.dbInfo) -> None:
         date_depart = st.date_input('Date of Departure')
         confirm_code = st.text_input('Confirmation Code')
 
-        ticket_submit = st.form_submit_button('Submit')
+        ticket_text_submit = st.form_submit_button('Submit')
 
-    if not ticket_submit:
-        st.stop()
+    if ticket_text_submit:
+        plane_code = airline_iata_map[airline]
+        year_depart = date_depart.year
+        month_depart = date_depart.month
+        day_depart = date_depart.day
 
-    if len(ticket_pics) != 0:
-        process_tickets(ticket_list=ticket_pics, ocr=False, ticket_num=ticket_num)
-    else:
-        st.warning("Please upload a screenshot of the ticket")
-        st.stop()
-
-    plane_code = airline_iata_map[airline]
-    year_depart = date_depart.year
-    month_depart = date_depart.month
-    day_depart = date_depart.day
-
-    ticket_data =[
-        plane_code, 
-        flight_num, 
-        year_depart, 
-        month_depart,
-        day_depart,
-        confirm_code,
-        date_depart
-        ]
-    db.write_info('ticket_info', ticket_data)
+        ticket_data =[
+            plane_code, 
+            flight_num, 
+            year_depart, 
+            month_depart,
+            day_depart,
+            confirm_code,
+            date_depart
+            ]
+        db.write_info('ticket_info', ticket_data)
 
 
 def auto_settings(db: d.dbInfo) -> None:

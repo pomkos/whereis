@@ -4,6 +4,7 @@ import pandas as pd # type: ignore
 
 from apps import db_stuff as d
 from enum import Enum
+from typing import List
 
 hide_streamlit_style = """
 <style>
@@ -27,7 +28,7 @@ class DataType(Enum):
     FUTURE = 3
 
 
-def message_maker(data, data_type: DataType, num=0):
+def message_maker(data: List[str], data_type: DataType, num=0) -> str:
     '''
     Creates message + link to the flight tracker
     '''
@@ -53,7 +54,7 @@ def message_maker(data, data_type: DataType, num=0):
         return message
 
 
-def check_how_tickets():
+def check_how_many_tickets() -> Tuple[pd.DataFrame, int]:
     '''
     Double checks how many tickets to show and generate links for
     '''
@@ -101,7 +102,7 @@ def app():
     except:
         st.error("No image found")
     st.write(f"## Picking {nickname} up?")
-    tickets, num = check_how_tickets()
+    tickets, num = check_how_many_tickets()
     if num == 0:
         st.info("No tickets were bought yet, check back later.")
     else:
