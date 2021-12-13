@@ -16,14 +16,22 @@ Simple webgui to update and present travel plans. Webgui thanks to the `streamli
 
 # Instructions
 
-First edit `line 43` of `whereis.py` to change the default name and nickname. Then:
+1. Edit `line 74` of `whereis.py` to change the default name and nickname.
+2. Edit `line 2` of `install.sh` to indicate location of miniconda/anaconda.
 
-```python
-pip install -r requirements.txt # install prereqs
-python db_reset.py # initiate sqlite database
-streamlit run whereis.py # start the main webpage
-streamlit run settings.py # start the settings page
+```bash
+sudo chmod +x install.sh
+sudo chmod +x start_me.sh
+
+./install.sh
 ```
+
+Installer script will:
+
+1. Create new environment
+2. Install all required python libraries
+3. Add a cronjob to cron (if user desires, can be done post installation as well)
+4. Start the whereis script on `port 8502` and whereadmin script on `port 8503`
 
 ## Update the Main Page
 
