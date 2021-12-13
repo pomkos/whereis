@@ -3,14 +3,14 @@ source $HOME/miniconda3/bin/activate
 
 echo "What would you like to do?"
 echo "[1] Install whereis"
-echo "[2] Edit crontab"
+echo "[2] Add to crontab"
 echo
 read input
 
 function edit_cron(){
     crontab -l > file
-    echo "nohup streamlit run $HOME/projects/whereis/whereis.py --server.port 8502 &" >> file
-    echo "nohup streamlit run $HOME/projects/whereis/settings.py --server.port 8503 &" >> file
+    echo "# start after each reboot" >> file
+    echo "@reboot      $HOME/projects/whereis/start_me.sh" >> file
     crontab file
     rm file
     echo "whereis and whereadmin will start every reboot"
@@ -53,4 +53,5 @@ then
     edit_cron
 else
     echo "No option selected"
+    exit 1
 fi
