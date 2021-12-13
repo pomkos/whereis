@@ -10,7 +10,7 @@ read input
 function edit_cron(){
     crontab -l > file
     echo "# start after each reboot" >> file
-    echo "@reboot      $HOME/projects/whereis/start_me.sh" >> file
+    echo "@reboot      $HOME/projects/whereis/start_me.sh > $HOME/projects/whereis/start_me.log 2>&1" >> file
     crontab file
     rm file
     echo "whereis and whereadmin will start every reboot"
