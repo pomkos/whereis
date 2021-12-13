@@ -32,7 +32,7 @@ function install_whereis()
     nohup streamlit run settings.py --server.port 8503 &
     conda deactivate
 
-    read cron "Append payme to crontab? [y/n] "
+    read cron "Append whereis to crontab? [y/n] "
     echo
 
 
