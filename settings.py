@@ -14,6 +14,21 @@ def save_image(image_name: str, image_file, message: str) -> None:
 
     st.success(message)
 
+def del_ticket_images():
+    '''
+    Permanently deletes all images of tickets
+    '''
+    import os
+    all_tickets = [image for image in os.listdir('images') if 'ticket' in image]
+    try:
+        for ticket in all_tickets:
+            os.remove(f"images/{ticket}")
+        st.success(f"Deleted all {len(all_tickets)} ticket screenshots")
+    except:
+        st.error("Screenshots were not deleted. Please investigate.")
+        st.write(all_tickets)
+        st.stop()
+
 def check_how_many_tickets() -> Tuple[pd.DataFrame, int]:
     '''
     Double checks how many tickets to show and generate links for
@@ -258,7 +273,7 @@ def remove_flight_info(db: d.dbInfo):
     reset_for_sure = st.checkbox("Yes, I want to do this")
     if not reset_for_sure:
         st.stop()
-
+    
     df = db.read_info('ticket_info')
     st.write("__Current Ticket Info__")
     st.table(df) # so the user can choose the right date
@@ -280,6 +295,7 @@ def remove_flight_info(db: d.dbInfo):
     if confirm == 'Yes':
         df.to_sql('ticket_info', db.cnx, if_exists='replace', index=False)
         st.success('Table overwritten!')
+        del_ticket_images()
     else:
         st.info("Nothing was accomplished")
         st.stop()
