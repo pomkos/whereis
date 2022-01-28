@@ -249,14 +249,47 @@ def no_duplicate_airline_data(airline_data: List[str], db: d.dbInfo) -> bool:
     
     else:
         return True
+
+def remove_flight_info(db: d.dbInfo):
+    '''
+    Removes flight info from the homepage, and only the flight info
+    '''
+    st.error("__Warning__: This will remove flight dates, times, screenshots from the database")
+    reset_for_sure = st.checkbox("Yes, I want to do this")
+    if not reset_for_sure:
+        st.stop()
+
+    df = db.read_info('ticket_info')
+    st.write("__Current Ticket Info__")
+    st.table(df) # so the user can choose the right date
+    confirm_code = st.text_input("Confirmation Code", help="All flights with this code will be removed from the database")
+    if not confirm_code:
+        st.info("Nothing was accomplished")
+        st.stop()
+
+    df = df[df['confirm_code'] != confirm_code]
+    st.write("__New Ticket Info__")
+    st.table(df) # so user can confirm
+    confirm = st.radio("Continue to overwrite db with above table?", ['No', 'Yes'])
+    submit = st.button('Submit')
     
+    if not submit:
+        st.info("Nothing was accomplished")
+        st.stop()
+    
+    if confirm == 'Yes':
+        df.to_sql('ticket_info', db.cnx, if_exists='replace', index=False)
+        st.success('Table overwritten!')
+    else:
+        st.info("Nothing was accomplished")
+        st.stop()
 
 def app():
     '''
     GUI to upload status and files
     '''    
     st.title("Admin Page")
-    display = st.sidebar.radio('Choose an action', options = ['Location Info', 'Ticket OCR', 'Ticket Manual', 'Add Airline to DB'])
+    display = st.sidebar.radio('Choose an action', options = ['Location Info', 'Ticket OCR', 'Ticket Manual', 'Add Airline to DB', 'Remove Flight'])
     db = d.dbInfo()
 
     if display == 'Ticket OCR':
@@ -265,9 +298,11 @@ def app():
         manual_settings(db)
     elif display == 'Add Airline to DB':
         add_airline(db)
+    elif display == 'Remove Flight':
+        remove_flight_info(db)
     else:
         get_basic_info(db)
-    
 
-        
+
+
 app()
