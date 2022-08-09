@@ -61,7 +61,7 @@ def check_how_many_tickets() -> Tuple[pd.DataFrame, int]:
     db = d.dbInfo()
     tickets = db.read_info('ticket_info')
 
-    tickets = tickets[tickets['date_depart'] >= dt.datetime.now()]
+    tickets = tickets[tickets['date_depart'] >= dt.datetime.now().date()]
 
     return tickets, len(tickets)
 
